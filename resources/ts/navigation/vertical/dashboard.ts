@@ -1,61 +1,33 @@
 export default [
   {
-    title: 'Dashboards',
+    title: 'Dashboard',
     icon: { icon: 'ri-home-smile-line' },
-    children: [
-      {
-        title: 'CRM',
-        to: 'dashboards-crm',
-      },
-      {
-        title: 'Analytics',
-        to: 'dashboards-analytics',
-      },
-      {
-        title: 'eCommerce',
-        to: 'dashboards-ecommerce',
-      },
-      {
-        title: 'Academy',
-        to: 'dashboards-academy',
-      },
-      {
-        title: 'Logistics',
-        to: 'dashboards-logistics',
-      },
-    ],
-    badgeContent: '5',
-    badgeClass: 'bg-error',
+    to: 'root',
+  },
+  { heading: 'Content' },
+  {
+    title: 'Categories',
+    icon: { icon: 'ri-price-tag-3-line' },
+    to: 'categories-listing',
   },
   {
-    title: 'Front Pages',
-    icon: { icon: 'ri-file-copy-line' },
+    title: 'Articles',
+    icon: { icon: 'ri-newspaper-line' },
+    to: 'articles-listing',
+  },
+  { heading: 'Digest' },
+  {
+    title: 'Digest',
+    icon: { icon: 'ri-mail-send-line' },
     children: [
-      {
-        title: 'Landing',
-        to: 'front-pages-landing-page',
-        target: '_blank',
-      },
-      {
-        title: 'Pricing',
-        to: 'front-pages-pricing',
-        target: '_blank',
-      },
-      {
-        title: 'Payment',
-        to: 'front-pages-payment',
-        target: '_blank',
-      },
-      {
-        title: 'Checkout',
-        to: 'front-pages-checkout',
-        target: '_blank',
-      },
-      {
-        title: 'Help Center',
-        to: 'front-pages-help-center',
-        target: '_blank',
-      },
+      { title: 'Today',    to: 'digest-listing'  },
+      { title: 'Settings', to: 'digest-settings' },
     ],
+  },
+  { heading: 'Account' },
+  {
+    title: 'Preferences',
+    icon: { icon: 'ri-settings-3-line' },
+    to: 'preferences',
   },
 ]
