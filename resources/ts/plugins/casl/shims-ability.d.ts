@@ -1,8 +1,6 @@
-import { ability } from './ability';
+import type { Actions, Subjects } from './ability'
+import type { MongoAbility } from '@casl/ability'
 
-declare module 'vue' {
-  interface ComponentCustomProperties {
-    $ability: typeof ability;
-    $can(this: this, ...args: Parameters<this['$ability']['can']>): boolean;
-  }
+declare module '@casl/vue' {
+  interface ProvidedAbility extends MongoAbility<[Actions, Subjects]> {}
 }

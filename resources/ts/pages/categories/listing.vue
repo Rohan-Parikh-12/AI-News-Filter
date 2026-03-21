@@ -1,5 +1,5 @@
 <script setup lang="ts">
-definePage({ meta: { action: 'read', subject: 'Web' } })
+definePage({ meta: { action: 'read', subject: 'Categories' } })
 </script>
 <template>
   <section><h4 class="text-h4">Categories</h4></section>

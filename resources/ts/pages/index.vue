@@ -1,6 +1,9 @@
 <script setup lang="ts">
-definePage({ meta: { action: 'read', subject: 'Web' } })
+definePage({ meta: { action: 'read', subject: 'Dashboard' } })
 </script>
+
 <template>
-  <section><h4 class="text-h4">Dashboard</h4></section>
+  <section>
+    <h4 class="text-h4">Dashboard</h4>
+  </section>
 </template>
