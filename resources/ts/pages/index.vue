@@ -3,7 +3,7 @@ import { $api } from '@/utils/api'
 
 definePage({ meta: { action: 'read', subject: 'Dashboard' } })
 
-const stats        = ref<any>(null)
+const stats          = ref<any>(null)
 const recentArticles = ref<any[]>([])
 const digestHistory  = ref<any[]>([])
 const loading        = ref(true)
@@ -53,7 +53,7 @@ onMounted(async () => {
       $api('getRecentArticles'),
       $api('getDigestHistory'),
     ])
-    stats.value        = statsRes.data
+    stats.value          = statsRes.data
     recentArticles.value = articlesRes.data
     digestHistory.value  = digestRes.data
   }
@@ -65,19 +65,23 @@ onMounted(async () => {
   <div>
     <!-- Stat Cards -->
     <VRow class="mb-6">
-      <VCol v-if="loading" v-for="n in 4" :key="n" cols="12" sm="6" lg="3">
-        <VCard>
-          <VCardText class="d-flex align-center gap-4">
-            <VSkeleton-loader type="avatar" />
-            <div class="flex-grow-1">
-              <VSkeleton-loader type="text" />
-              <VSkeleton-loader type="text" width="60%" />
-            </div>
-          </VCardText>
-        </VCard>
-      </VCol>
+      <!-- Loading skeletons -->
+      <template v-if="loading">
+        <VCol v-for="n in 4" :key="n" cols="12" sm="6" lg="3">
+          <VCard>
+            <VCardText class="d-flex align-center gap-4">
+              <VSkeletonLoader type="avatar" width="42" height="42" />
+              <div class="flex-grow-1">
+                <VSkeletonLoader type="text" class="mb-1" />
+                <VSkeletonLoader type="text" width="60%" />
+              </div>
+            </VCardText>
+          </VCard>
+        </VCol>
+      </template>
 
-      <template v-if="!loading">
+      <!-- Loaded stat cards -->
+      <template v-else>
         <VCol v-for="card in statCards" :key="card.title" cols="12" sm="6" lg="3">
           <VCard>
             <VCardText class="d-flex align-center gap-4">
@@ -108,7 +112,7 @@ onMounted(async () => {
           <VDivider />
 
           <VCardText v-if="loading" class="pa-4">
-            <VSkeleton-loader v-for="n in 3" :key="n" type="list-item-avatar-two-line" class="mb-2" />
+            <VSkeletonLoader v-for="n in 3" :key="n" type="list-item-avatar-two-line" class="mb-2" />
           </VCardText>
 
           <VList v-else-if="recentArticles.length" lines="two">
@@ -120,13 +124,7 @@ onMounted(async () => {
               class="px-4"
             >
               <template #prepend>
-                <VAvatar
-                  rounded
-                  size="44"
-                  :image="article.image_url || undefined"
-                  color="primary"
-                  variant="tonal"
-                >
+                <VAvatar rounded size="44" :image="article.image_url || undefined" color="primary" variant="tonal">
                   <VIcon v-if="!article.image_url" icon="ri-newspaper-line" />
                 </VAvatar>
               </template>
@@ -169,15 +167,11 @@ onMounted(async () => {
           <VDivider />
 
           <VCardText v-if="loading">
-            <VSkeleton-loader v-for="n in 5" :key="n" type="list-item-two-line" class="mb-1" />
+            <VSkeletonLoader v-for="n in 5" :key="n" type="list-item-two-line" class="mb-1" />
           </VCardText>
 
           <VList v-else-if="digestHistory.length" lines="two">
-            <VListItem
-              v-for="log in digestHistory"
-              :key="log.id"
-              class="px-4"
-            >
+            <VListItem v-for="log in digestHistory" :key="log.id" class="px-4">
               <template #prepend>
                 <VAvatar :color="digestStatusColor[log.status]" variant="tonal" size="36" rounded>
                   <VIcon

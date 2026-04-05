@@ -96,7 +96,7 @@ async function onSubmit() {
     <PerfectScrollbar :options="{ wheelPropagation: false }">
       <VCard flat>
         <VCardText>
-          <VForm ref="refForm" v-model:is-form-valid="isSaving" @submit.prevent="onSubmit">
+          <VForm ref="refForm" @submit.prevent="onSubmit">
             <VRow>
               <VCol cols="12">
                 <VTextField
