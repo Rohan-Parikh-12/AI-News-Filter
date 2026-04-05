@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\Api\ArticleController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\RoleController;
 use Illuminate\Support\Facades\Route;
@@ -14,6 +16,22 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('auth/logout', [AuthController::class, 'logout']);
     Route::get('auth/me',      [AuthController::class, 'me']);
+
+    // Dashboard
+    Route::controller(DashboardController::class)->group(function () {
+        Route::get('getDashboardStatistic', 'getDashboardStatistic')->name('getDashboardStatistic');
+        Route::get('getRecentArticles',     'getRecentArticles')->name('getRecentArticles');
+        Route::get('getDigestHistory',      'getDigestHistory')->name('getDigestHistory');
+    });
+
+    // Articles
+    Route::controller(ArticleController::class)->group(function () {
+        Route::get('getArticleData',    'getArticleData')->name('getArticleData');
+        Route::get('getArticleDetails', 'getArticleDetails')->name('getArticleDetails');
+        Route::post('articleSave',      'articleSave')->name('articleSave');
+        Route::post('articleUnsave',    'articleUnsave')->name('articleUnsave');
+        Route::get('articleStatistic',  'articleStatistic')->name('articleStatistic');
+    });
 
     // Categories
     Route::controller(CategoryController::class)->group(function () {
