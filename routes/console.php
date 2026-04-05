@@ -1,8 +1,14 @@
 <?php
 
-use Illuminate\Foundation\Inspiring;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schedule;
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote')->hourly();
+// Fetch news every 3 hours
+Schedule::command('news:fetch')
+    ->everyThreeHours()
+    ->withoutOverlapping()
+    ->runInBackground();
+
+// Summarize new articles every 30 minutes
+Schedule::command('news:summarize')
+    ->everyThirtyMinutes()
+    ->withoutOverlapping();

@@ -35,4 +35,16 @@ return [
         ],
     ],
 
+    'newsapi' => [
+        'key' => env('NEWS_API_KEY'),
+    ],
+
+    'gnews' => [
+        'key' => env('GNEWS_API_KEY'),
+    ],
+
+    'gemini' => [
+        'key' => env('GEMINI_API_KEY'),
+    ],
+
 ];
