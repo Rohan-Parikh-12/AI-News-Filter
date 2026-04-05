@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\ArticleController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\DigestController;
 use App\Http\Controllers\Api\PreferenceController;
 use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\RoleController;
@@ -43,6 +44,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('categoryStatusChange', 'categoryStatusChange')->name('categoryStatusChange');
         Route::get('categoryStatistic',     'categoryStatistic')->name('categoryStatistic');
         Route::get('categoryHistory',       'categoryHistory')->name('categoryHistory');
+    });
+
+    // Digest
+    Route::controller(DigestController::class)->group(function () {
+        Route::get('getDigestToday',       'getDigestToday')->name('getDigestToday');
+        Route::get('getDigestData',        'getDigestData')->name('getDigestData');
+        Route::post('manageDigestSettings','manageDigestSettings')->name('manageDigestSettings');
+        Route::get('getDigestStatistic',   'getDigestStatistic')->name('getDigestStatistic');
     });
 
     // Preferences
