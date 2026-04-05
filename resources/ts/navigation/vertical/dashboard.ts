@@ -40,4 +40,12 @@ export default [
     action: 'read',
     subject: 'Preferences',
   },
+  { heading: 'Administration' },
+  {
+    title: 'Settings',
+    icon: { icon: 'ri-shield-keyhole-line' },
+    to: 'settings',
+    action: 'manage',
+    subject: 'Settings',
+  },
 ]

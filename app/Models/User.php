@@ -36,6 +36,13 @@ class User extends Authenticatable
      * admin role → manage all
      * other roles → map each Spatie permission to a CASL rule
      */
+    // Relationships
+    public function digestSetting()  { return $this->hasOne(DigestSetting::class); }
+    public function digestLogs()     { return $this->hasMany(DigestLog::class); }
+    public function categories()     { return $this->belongsToMany(Category::class, 'user_categories'); }
+    public function savedArticles()  { return $this->belongsToMany(NewsArticle::class, 'saved_articles', 'user_id', 'article_id'); }
+    public function deviceTokens()   { return $this->hasMany(DeviceToken::class); }
+
     public function abilityRules(): array
     {
         if ($this->hasRole('admin')) {

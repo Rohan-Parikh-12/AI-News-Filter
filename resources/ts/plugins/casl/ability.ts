@@ -8,6 +8,7 @@ export type Subjects =
   | 'Articles'
   | 'Digest'
   | 'Preferences'
+  | 'Settings'
   | 'all'
 
 export interface Rule { action: Actions; subject: Subjects | string }
