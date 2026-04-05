@@ -29,7 +29,10 @@ class ArticleRepository implements ArticleRepositoryInterface
         $result = $this->applyPagination($query, (int)($request->page ?? 1), (int)($request->itemsPerPage ?? 10));
 
         $userId = $request->user()?->id;
-        $result['data'] = $result['data']->map(fn($a) => $this->format($a, $userId));
+        $savedIds = $userId
+            ? SavedArticle::where('user_id', $userId)->pluck('article_id')->toArray()
+            : [];
+        $result['data'] = $result['data']->map(fn($a) => $this->format($a, $savedIds));
 
         return $result;
     }
@@ -37,7 +40,7 @@ class ArticleRepository implements ArticleRepositoryInterface
     public function getArticleDetails(int $id): array
     {
         $article = NewsArticle::with(['category', 'summary'])->findOrFail($id);
-        return $this->format($article, null);
+        return $this->format($article, []);
     }
 
     public function articleSave(int $userId, int $articleId): bool
@@ -62,7 +65,7 @@ class ArticleRepository implements ArticleRepositoryInterface
         ];
     }
 
-    private function format(NewsArticle $a, ?int $userId): array
+    private function format(NewsArticle $a, array $savedIds): array
     {
         return [
             'id'           => $a->id,
@@ -76,7 +79,7 @@ class ArticleRepository implements ArticleRepositoryInterface
             'category'     => $a->category?->name,
             'category_id'  => $a->category_id,
             'summary'      => $a->summary?->summary,
-            'is_saved'     => $userId ? $a->savedBy()->where('user_id', $userId)->exists() : false,
+            'is_saved'     => in_array($a->id, $savedIds),
             'status'       => $a->status,
         ];
     }

@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\ArticleController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\PreferenceController;
 use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\RoleController;
 use Illuminate\Support\Facades\Route;
@@ -42,6 +43,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('categoryStatusChange', 'categoryStatusChange')->name('categoryStatusChange');
         Route::get('categoryStatistic',     'categoryStatistic')->name('categoryStatistic');
         Route::get('categoryHistory',       'categoryHistory')->name('categoryHistory');
+    });
+
+    // Preferences
+    Route::controller(PreferenceController::class)->group(function () {
+        Route::get('getUserPreferences',    'getUserPreferences')->name('getUserPreferences');
+        Route::post('manageUserPreferences','manageUserPreferences')->name('manageUserPreferences');
     });
 
     // Roles

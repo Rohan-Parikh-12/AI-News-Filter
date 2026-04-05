@@ -14,7 +14,7 @@ const sortBy       = ref('sort_order')
 const orderBy      = ref('asc')
 const selectedRows = ref<number[]>([])
 const drawerRef    = ref<InstanceType<typeof CategoryDrawer>>()
-const isDrawerOpen = ref(false)
+const initialized  = ref(false)
 
 const headers = [
   { title: 'Name',        key: 'name' },
@@ -45,7 +45,7 @@ function updateOptions(options: any) {
   page.value    = options.page
   sortBy.value  = options.sortBy[0]?.key   ?? 'sort_order'
   orderBy.value = options.sortBy[0]?.order  ?? 'asc'
-  fetchData()
+  if (initialized.value) fetchData()
 }
 
 watch(searchQuery, () => { page.value = 1; fetchData() })
@@ -87,7 +87,10 @@ async function onDelete(id: number) {
   }
 }
 
-onMounted(() => fetchData())
+onMounted(async () => {
+  initialized.value = true
+  await fetchData()
+})
 </script>
 
 <template>
