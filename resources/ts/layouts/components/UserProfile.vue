@@ -1,65 +1,9 @@
 <script setup lang="ts">
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
+import { useAuthStore } from '@/stores/auth'
 
-const router = useRouter()
-const ability = useAbility()
-
-// TODO: Get type from backend
-const userData = useCookie<any>('userData')
-
-const logout = async () => {
-  // Remove "accessToken" from cookie
-  useCookie('accessToken').value = null
-
-  // Remove "userData" from cookie
-  userData.value = null
-
-  // Redirect to login page
-  await router.push('/login')
-
-  // ℹ️ We had to remove abilities in then block because if we don't nav menu items mutation is visible while redirecting user to login page
-  // Remove "userAbilities" from cookie
-  useCookie('userAbilityRules').value = null
-
-  // Reset ability to initial ability
-  ability.update([])
-}
-
-const userProfileList = [
-  { type: 'divider' },
-  {
-    type: 'navItem',
-    icon: 'ri-user-line',
-    title: 'Profile',
-    to: { name: 'apps-user-view-id', params: { id: 21 } },
-  },
-  {
-    type: 'navItem',
-    icon: 'ri-settings-4-line',
-    title: 'Settings',
-    to: { name: 'pages-account-settings-tab', params: { tab: 'account' } },
-  },
-  {
-    type: 'navItem',
-    icon: 'ri-file-text-line',
-    title: 'Billing Plan',
-    to: { name: 'pages-account-settings-tab', params: { tab: 'billing-plans' } },
-    chipsProps: { color: 'error', text: '4', size: 'small' },
-  },
-  { type: 'divider' },
-  {
-    type: 'navItem',
-    icon: 'ri-money-dollar-circle-line',
-    title: 'Pricing',
-    to: { name: 'pages-pricing' },
-  },
-  {
-    type: 'navItem',
-    icon: 'ri-question-line',
-    title: 'FAQ',
-    to: { name: 'pages-faq' },
-  },
-]
+const authStore = useAuthStore()
+const userData  = useCookie<any>('userData')
 </script>
 
 <template>
@@ -79,39 +23,21 @@ const userProfileList = [
       :color="!(userData && userData.avatar) ? 'primary' : undefined"
       :variant="!(userData && userData.avatar) ? 'tonal' : undefined"
     >
-      <VImg
-        v-if="userData && userData.avatar"
-        :src="userData.avatar"
-      />
-      <VIcon
-        v-else
-        icon="ri-user-line"
-      />
+      <VImg v-if="userData && userData.avatar" :src="userData.avatar" />
+      <VIcon v-else icon="ri-user-line" />
 
-      <!-- SECTION Menu -->
-      <VMenu
-        activator="parent"
-        width="230"
-        location="bottom end"
-        offset="15px"
-      >
+      <VMenu activator="parent" width="230" location="bottom end" offset="15px">
         <VList>
+          <!-- User info -->
           <VListItem class="px-4">
             <div class="d-flex gap-x-2 align-center">
               <VAvatar
                 :color="!(userData && userData.avatar) ? 'primary' : undefined"
                 :variant="!(userData && userData.avatar) ? 'tonal' : undefined"
               >
-                <VImg
-                  v-if="userData && userData.avatar"
-                  :src="userData.avatar"
-                />
-                <VIcon
-                  v-else
-                  icon="ri-user-line"
-                />
+                <VImg v-if="userData && userData.avatar" :src="userData.avatar" />
+                <VIcon v-else icon="ri-user-line" />
               </VAvatar>
-
               <div>
                 <div class="text-body-2 font-weight-medium text-high-emphasis">
                   {{ userData.fullName || userData.username }}
@@ -123,49 +49,27 @@ const userProfileList = [
             </div>
           </VListItem>
 
+          <VDivider class="my-1" />
+
           <PerfectScrollbar :options="{ wheelPropagation: false }">
-            <template
-              v-for="item in userProfileList"
-              :key="item.title"
-            >
-              <VListItem
-                v-if="item.type === 'navItem'"
-                :to="item.to"
-                class="px-4"
-              >
-                <template #prepend>
-                  <VIcon
-                    :icon="item.icon"
-                    size="22"
-                  />
-                </template>
+            <!-- Preferences -->
+            <VListItem :to="{ name: 'preferences' }" class="px-4">
+              <template #prepend>
+                <VIcon icon="ri-settings-4-line" size="22" />
+              </template>
+              <VListItemTitle>Preferences</VListItemTitle>
+            </VListItem>
 
-                <VListItemTitle>{{ item.title }}</VListItemTitle>
+            <VDivider class="my-1" />
 
-                <template
-                  v-if="item.chipsProps"
-                  #append
-                >
-                  <VChip
-                    v-bind="item.chipsProps"
-                    variant="elevated"
-                  />
-                </template>
-              </VListItem>
-
-              <VDivider
-                v-else
-                class="my-1"
-              />
-            </template>
-
+            <!-- Logout -->
             <VListItem class="px-4">
               <VBtn
                 block
                 color="error"
                 size="small"
                 append-icon="ri-logout-box-r-line"
-                @click="logout"
+                @click="authStore.logout()"
               >
                 Logout
               </VBtn>
@@ -173,7 +77,6 @@ const userProfileList = [
           </PerfectScrollbar>
         </VList>
       </VMenu>
-      <!-- !SECTION -->
     </VAvatar>
   </VBadge>
 </template>
